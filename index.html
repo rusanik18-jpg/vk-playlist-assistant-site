@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2787f5">
+  <title>VK Playlist Assistant</title>
+  <style>
+    :root { color-scheme: light; --blue:#2787f5; --ink:#17212b; --muted:#687786; --line:#e5eaf0; }
+    * { box-sizing: border-box; }
+    body { margin:0; font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--ink); background:#f5f7fa; }
+    main { width:min(100% - 32px, 680px); margin:32px auto; }
+    header { display:flex; align-items:center; gap:12px; margin-bottom:24px; }
+    .logo { display:grid; place-items:center; width:48px; height:48px; border-radius:14px; color:white; background:var(--blue); font-size:25px; font-weight:700; }
+    h1 { font-size:clamp(24px,6vw,34px); line-height:1.15; margin:0; }
+    .subtitle { color:var(--muted); margin:5px 0 0; }
+    section { background:white; border:1px solid var(--line); border-radius:20px; padding:22px; margin:16px 0; box-shadow:0 4px 18px #1d35570a; }
+    h2 { font-size:20px; margin:0 0 10px; }
+    p { margin:8px 0; }
+    label { display:block; font-weight:600; margin:16px 0 6px; }
+    select, textarea, button { font:inherit; width:100%; border-radius:12px; }
+    select, textarea { border:1px solid #cbd5df; padding:12px; background:#fff; color:var(--ink); }
+    textarea { min-height:92px; resize:vertical; }
+    button { margin-top:14px; border:0; padding:13px 16px; background:var(--blue); color:white; font-weight:650; cursor:pointer; }
+    button:focus-visible, select:focus-visible, textarea:focus-visible { outline:3px solid #a8d0ff; outline-offset:2px; }
+    .result { margin-top:14px; padding:14px; background:#f2f7ff; border-radius:12px; white-space:pre-wrap; }
+    .notice { color:var(--muted); font-size:14px; }
+    footer { color:var(--muted); font-size:13px; text-align:center; padding:16px 0 28px; }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="logo" aria-hidden="true">♫</div>
+    <div>
+      <h1>VK Playlist Assistant</h1>
+      <p class="subtitle">Помощник для планирования музыкальных подборок</p>
+    </div>
+  </header>
+
+  <section>
+    <h2>Собери идею плейлиста</h2>
+    <p>Выбери настроение и опиши, что хочешь слушать. Страница подготовит план подборки — пока без подключения к музыкальному аккаунту VK.</p>
+    <label for="mood">Настроение</label>
+    <select id="mood">
+      <option>Спокойное</option>
+      <option>Энергичное</option>
+      <option>Романтичное</option>
+      <option>Меланхоличное</option>
+      <option>Для дороги</option>
+      <option>Для тренировки</option>
+    </select>
+    <label for="details">Жанры, исполнители или пожелания (необязательно)</label>
+    <textarea id="details" placeholder="Например: инди-поп, русскоязычные треки, без тяжёлого рока"></textarea>
+    <button id="make">Составить план плейлиста</button>
+    <div id="result" class="result" role="status" hidden></div>
+  </section>
+
+  <section>
+    <h2>Статус подключения VK</h2>
+    <p>VK пока не подключён. Эта версия не запрашивает пароль, токен или cookies и не изменяет данные аккаунта.</p>
+    <p class="notice">Прежде чем включать вход через VK или добавление аудио, необходимо проверить официально доступные методы API и реализовать безопасную серверную авторизацию.</p>
+  </section>
+
+  <footer>VK Playlist Assistant · Стартовая версия</footer>
+</main>
+<script>
+  document.getElementById('make').addEventListener('click', function () {
+    const mood = document.getElementById('mood').value;
+    const details = document.getElementById('details').value.trim();
+    const tips = {
+      'Спокойное': 'Начни с мягкого темпа, акустики и ненавязчивого вокала.',
+      'Энергичное': 'Расположи самые динамичные треки в начале и ближе к финалу.',
+      'Романтичное': 'Сочетай тёплые баллады с лёгкими мелодичными композициями.',
+      'Меланхоличное': 'Выбери атмосферные треки и плавные переходы по настроению.',
+      'Для дороги': 'Чередуй знакомые песни и новые открытия, чтобы подборка не утомляла.',
+      'Для тренировки': 'Постепенно увеличивай темп и оставь самые энергичные композиции на основную часть.'
+    };
+    const result = 'План: ' + mood + '\n\n' + tips[mood] +
+      (details ? '\n\nТвои пожелания: ' + details : '') +
+      '\n\nСледующий этап — подобрать конкретные треки и проверить, доступны ли официальные способы добавить их в VK.';
+    const box = document.getElementById('result');
+    box.textContent = result;
+    box.hidden = false;
+  });
+</script>
+</body>
+</html>
